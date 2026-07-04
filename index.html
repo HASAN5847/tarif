@@ -29,6 +29,7 @@
             overflow-y: auto;
             padding: 20px;
             border-right: 1px solid #e0e0e0;
+            z-index: 100;
         }
 
         .sidebar h2 {
@@ -38,11 +39,7 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #d32f2f;
             cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .sidebar h2:hover {
-            color: #b71c1c;
+            user-select: none;
         }
 
         .category-group {
@@ -68,7 +65,6 @@
             font-size: 14px;
             display: block;
             padding: 4px 0;
-            transition: color 0.2s;
         }
 
         .sub-categories li a:hover {
@@ -116,6 +112,8 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
+            display: block;
+            background-color: #eee;
         }
 
         .recipe-info {
@@ -165,7 +163,7 @@
             text-decoration: none;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
+            user-select: none;
         }
 
         .back-btn:hover {
@@ -174,10 +172,12 @@
 
         .detail-image {
             width: 100%;
-            max-height: 400px;
+            max-height: 350px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 20px;
+            display: block;
+            background-color: #eee;
         }
 
         .detail-section {
@@ -206,7 +206,7 @@
 
     <!-- Kategori Düzenleyici Sol Menü -->
     <div class="sidebar">
-        <h2 onclick="showList()">🏠 Tarif Kitabı</h2>
+        <h2 id="menu-home-btn">🏠 Tarif Kitabı</h2>
         
         <div class="category-group">
             <span class="category-title">Çorbalar</span>
@@ -260,9 +260,9 @@
             </div>
 
             <div class="recipe-grid">
-                <!-- Kart 1 -->
-                <div class="recipe-card" onclick="showRecipe('mercimek')">
-                    <img src="https://images.unsplash.com/photo-1547592165-e1d17fed6005?q=80&w=500" alt="Mercimek Çorbası" class="recipe-image">
+                <!-- Kart 1 (id bilgisi eklendi, onclick kaldırıldı) -->
+                <div class="recipe-card" id="card-mercimek">
+                    <img src="https://images.unsplash.com/photo-1547592165-e1d17fed6005?auto=format&fit=crop&w=600&q=80" alt="Mercimek Çorbası" class="recipe-image">
                     <div class="recipe-info">
                         <span class="recipe-tag">Baklagil Çorbaları</span>
                         <div class="recipe-name">Süzme Mercimek Çorbası</div>
@@ -271,8 +271,8 @@
                 </div>
 
                 <!-- Kart 2 -->
-                <div class="recipe-card" onclick="showRecipe('kurufasulye')">
-                    <img src="https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=500" alt="Kuru Fasulye" class="recipe-image">
+                <div class="recipe-card" id="card-kurufasulye">
+                    <img src="https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=600&q=80" alt="Kuru Fasulye" class="recipe-image">
                     <div class="recipe-info">
                         <span class="recipe-tag">Baklagil Yemekleri</span>
                         <div class="recipe-name">Geleneksel Kuru Fasulye</div>
@@ -281,8 +281,8 @@
                 </div>
 
                 <!-- Kart 3 -->
-                <div class="recipe-card" onclick="showRecipe('baklava')">
-                    <img src="https://images.unsplash.com/photo-1519676867240-f03562e64548?q=80&w=500" alt="Gaziantep Baklavası" class="recipe-image">
+                <div class="recipe-card" id="card-baklava">
+                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80" alt="Gaziantep Baklavası" class="recipe-image">
                     <div class="recipe-info">
                         <span class="recipe-tag">Şerbetli Tatlılar</span>
                         <div class="recipe-name">Antep Fıstıklı Baklava</div>
@@ -294,9 +294,10 @@
 
         <!-- Detay Görünümü -->
         <div id="detail-view" class="recipe-detail">
-            <span class="back-btn" onclick="showList()">⬅ Ana Sayfaya Dön</span>
+            <div class="back-btn" id="back-to-home-btn">⬅ Ana Sayfaya Dön</div>
             <h1 id="detail-title">Yemek Adı</h1>
             <span id="detail-tag" class="recipe-tag" style="margin-top: 10px;">Kategori</span>
+            
             <img id="detail-img" src="" alt="" class="detail-image" style="margin-top: 20px;">
             
             <div class="detail-section">
@@ -312,12 +313,12 @@
     </div>
 
     <script>
-        // Güvenli ve temiz veri yapısı
+        // Tarif verileri (Görseller en stabil sunuculardan güncellendi)
         const recipeData = {
             mercimek: {
                 title: "Süzme Mercimek Çorbası",
                 tag: "Baklagil Çorbaları",
-                img: "https://images.unsplash.com/photo-1547592165-e1d17fed6005?q=80&w=500",
+                img: "https://images.unsplash.com/photo-1547592165-e1d17fed6005?auto=format&fit=crop&w=800&q=80",
                 ingredients: [
                     "1 su bardağı kırmızı mercimek",
                     "1 adet kuru soğan",
@@ -328,16 +329,16 @@
                     "Tuz, karabiber, kimyon"
                 ],
                 instructions: [
-                    "Sebzeleri küp küp doğrayın ve tereyağında kavurun",
-                    "Yıkanmış mercimekleri ve sıcak suyu ekleyip sebzeler yumuşayana kadar pişirin",
-                    "Çorbayı pürüzsüz olana kadar blenderdan geçirin",
-                    "Üzerine kızdırılmış tereyağı ve pul biber dökerek servis yapın"
+                    "Sebzeleri küp küp doğrayın ve tereyağında kavurun.",
+                    "Yıkanmış mercimekleri ve sıcak suyu ekleyip sebzeler yumuşayana kadar pişirin.",
+                    "Çorbayı pürüzsüz olana kadar blenderdan geçirin.",
+                    "Üzerine kızdırılmış tereyağı ve pul biber dökerek servis yapın."
                 ]
             },
             kurufasulye: {
                 title: "Geleneksel Kuru Fasulye",
                 tag: "Baklagil Yemekleri",
-                img: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=500",
+                img: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=800&q=80",
                 ingredients: [
                     "2 su bardağı kuru fasulye (akşamdan ıslatılmış)",
                     "1 adet kuru soğan",
@@ -348,16 +349,16 @@
                     "Sıcak su, tuz"
                 ],
                 instructions: [
-                    "Etleri düdüklü tencereye alıp suyunu salıp çekene kadar kavurun",
-                    "Soğanları ekleyip pembeleşene kadar kavurmaya devam edin",
-                    "Salçaları ekleyin ardından süzdüğünüz fasulyeleri ilave edin",
-                    "Üzerini geçecek kadar sıcak su ve tuz ekleyip fasulyeler yumuşayana kadar pişirin"
+                    "Etleri düdüklü tencereye alıp suyunu salıp çekene kadar kavurun.",
+                    "Soğanları ekleyip pembeleşene kadar kavurmaya devam edin.",
+                    "Salçaları ekleyin ardından süzdüğünüz fasulyeleri ilave edin.",
+                    "Üzerini geçecek kadar sıcak su ve tuz ekleyip fasulyeler yumuşayana kadar pişirin."
                 ]
             },
             baklava: {
                 title: "Antep Fıstıklı Baklava",
                 tag: "Şerbetli Tatlılar",
-                img: "https://images.unsplash.com/photo-1519676867240-f03562e64548?q=80&w=500",
+                img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80",
                 ingredients: [
                     "1 paket hazır baklavalık yufka",
                     "250 gr tereyağı",
@@ -365,55 +366,85 @@
                     "Şerbeti için: 3 su bardağı şeker, 3 su bardağı su, 1 tatlı kaşığı limon suyu"
                 ],
                 instructions: [
-                    "Öncelikle şerbeti kaynatın ve soğumaya bırakın",
-                    "Eritilmiş tereyağı ile yufkaları aralarına sürerek tepsiye dizin",
-                    "Orta kata bolca Antep fıstığı serpiştirin",
-                    "Kalan yufkaları da aynı şekilde dizip baklavayı dilimleyin",
-                    "180 derece fırında altı üstü kızarana kadar pişirin ve sıcak baklavaya soğuk şerbeti verin"
+                    "Öncelikle şerbeti kaynatın ve soğumaya bırakın.",
+                    "Eritilmiş tereyağı ile yufkaları aralarına sürerek tepsiye dizin.",
+                    "Orta kata bolca Antep fıstığı serpiştirin.",
+                    "Kalan yufkaları da aynı şekilde dizip baklavayı dilimleyin.",
+                    "180 derece fırında altı üstü kızarana kadar pişirin ve sıcak baklavaya soğuk şerbeti verin."
                 ]
             }
         };
 
-        // Tarif detayını gösteren ana fonksiyon
-        function showRecipe(recipeKey) {
-            const recipe = recipeData[recipeKey];
-            if (!recipe) return;
+        // Tarif detayını ekrana basan güvenli fonksiyon
+        function openRecipeDetails(recipeKey) {
+            const data = recipeData[recipeKey];
+            if (!data) return;
 
-            document.getElementById('detail-title').innerText = recipe.title;
-            document.getElementById('detail-tag').innerText = recipe.tag;
-            document.getElementById('detail-img').src = recipe.img;
-            document.getElementById('detail-img').alt = recipe.title;
+            document.getElementById('detail-title').innerText = data.title;
+            document.getElementById('detail-tag').innerText = data.tag;
+            document.getElementById('detail-img').src = data.img;
+            document.getElementById('detail-img').alt = data.title;
 
-            // Malzemeleri yükle
+            // Malzeme listesini güvenle temizle ve doldur
             const ingList = document.getElementById('detail-ingredients');
             ingList.innerHTML = '';
-            recipe.ingredients.forEach(function(ing) {
+            for (let i = 0; i < data.ingredients.length; i++) {
                 const li = document.createElement('li');
-                li.innerText = ing;
+                li.innerText = data.ingredients[i];
                 ingList.appendChild(li);
-            });
+            }
 
-            // Hazırlanışı yükle
+            // Hazırlanış adımlarını güvenle temizle ve doldur
             const insList = document.getElementById('detail-instructions');
             insList.innerHTML = '';
-            recipe.instructions.forEach(function(ins) {
+            for (let j = 0; j < data.instructions.length; j++) {
                 const li = document.createElement('li');
-                li.innerText = ins;
+                li.innerText = data.instructions[j];
                 insList.appendChild(li);
-            });
+            }
 
-            // Görünümü değiştir
+            // Sayfaları değiştir
             document.getElementById('list-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
             window.scrollTo(0, 0);
         }
 
-        // Ana sayfaya dönme fonksiyonu
-        function showList() {
+        // Ana listeye geri dönme fonksiyonu
+        function backToHomeList() {
             document.getElementById('list-view').style.display = 'block';
             document.getElementById('detail-view').style.display = 'none';
             window.scrollTo(0, 0);
         }
+
+        // DÜĞME VE KART BAĞLANTILARI (En güvenli JavaScript Olay Dinleyicileri)
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Kart tıklamaları
+            document.getElementById('card-mercimek').addEventListener('click', function() {
+                openRecipeDetails('mercimek');
+            });
+
+            document.getElementById('card-kurufasulye').addEventListener('click', function() {
+                openRecipeDetails('kurufasulye');
+            });
+
+            document.getElementById('card-baklava').addEventListener('click', function() {
+                openRecipeDetails('baklava');
+            });
+
+            // Geri dön butonları
+            document.getElementById('back-to-home-btn').addEventListener('click', backToHomeList);
+            document.getElementById('menu-home-btn').addEventListener('click', backToHomeList);
+
+            // Sol menüdeki boş kategorilere tıklanırsa da ana sayfaya atsın (kilitlenmesin diye)
+            const links = document.querySelectorAll('.sub-categories a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    backToHomeList();
+                });
+            });
+        });
     </script>
 </body>
 </html>
