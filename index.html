@@ -1,450 +1,50 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lezzet Akademisi - Yemek Tarifleri</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            display: flex;
-            background-color: #faf8f5;
-            color: #333;
-        }
-
-        /* Sol Menü - Kategoriler */
-        .sidebar {
-            width: 300px;
-            background-color: #ffffff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
-            padding: 20px;
-            border-right: 1px solid #e0e0e0;
-            z-index: 100;
-        }
-
-        .sidebar h2 {
-            font-size: 20px;
-            color: #d32f2f;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #d32f2f;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .category-group {
-            margin-bottom: 15px;
-        }
-
-        .category-title {
-            font-weight: bold;
-            color: #4f4f4f;
-            font-size: 15px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .sub-categories {
-            list-style: none;
-            padding-left: 15px;
-        }
-
-        .sub-categories li a {
-            text-decoration: none;
-            color: #777;
-            font-size: 14px;
-            display: block;
-            padding: 4px 0;
-        }
-
-        .sub-categories li a:hover {
-            color: #d32f2f;
-        }
-
-        /* Sağ İçerik Alanı */
-        .main-content {
-            margin-left: 300px;
-            flex: 1;
-            padding: 40px;
-        }
-
-        .header {
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            color: #222;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        /* Tarif Kartları Yapısı */
-        .recipe-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .recipe-card {
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .recipe-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            background-color: #eee;
-        }
-
-        .recipe-info {
-            padding: 20px;
-        }
-
-        .recipe-tag {
-            font-size: 12px;
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        .recipe-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #222;
-        }
-
-        .recipe-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        /* Tarif Detay Görünümü */
-        .recipe-detail {
-            display: none;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            background-color: #d32f2f;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .back-btn:hover {
-            background-color: #b71c1c;
-        }
-
-        .detail-image {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: block;
-            background-color: #eee;
-        }
-
-        .detail-section {
-            margin-top: 20px;
-        }
-
-        .detail-section h3 {
-            margin-bottom: 10px;
-            color: #c62828;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        .detail-section ul, .detail-section ol {
-            padding-left: 20px;
-            line-height: 1.8;
-            font-size: 15px;
-        }
-        
-        .detail-section li {
-            margin-bottom: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Okul Sayaci</title>
+<style>
+  body { font-family: sans-serif; text-align: center; margin-top: 50px }
+  input, button { padding: 10px; font-size: 16px }
+  #timer { font-size: 24px; margin-top: 20px; font-weight: bold; color: #cc0000 }
+</style>
 </head>
 <body>
 
-    <!-- Kategori Düzenleyici Sol Menü -->
-    <div class="sidebar">
-        <h2 id="menu-home-btn">🏠 Tarif Kitabı</h2>
-        
-        <div class="category-group">
-            <span class="category-title">Çorbalar</span>
-            <ul class="sub-categories">
-                <li><a href="#">Kremalı çorbalar</a></li>
-                <li><a href="#">Sebze çorbaları</a></li>
-                <li><a href="#">Baklagil çorbaları</a></li>
-                <li><a href="#">Et ve tavuk çorbaları</a></li>
-            </ul>
-        </div>
+<h1>Okul Sayaci</h1>
+<input type="text" id="schoolInput" placeholder="Okul adi yazin">
+<button onclick="startTimer()">Okulu Ara</button>
 
-        <div class="category-group">
-            <span class="category-title">Kahvaltılıklar</span>
-            <ul class="sub-categories">
-                <li><a href="#">Yumurtalı tarifler</a></li>
-                <li><a href="#">Krep ve pankek</a></li>
-                <li><a href="#">Omletler</a></li>
-                <li><a href="#">Kahvaltılık soslar</a></li>
-            </ul>
-        </div>
+<div id="timer"></div>
 
-        <div class="category-group">
-            <span class="category-title">Ana Yemekler</span>
-            <ul class="sub-categories">
-                <li><a href="#">Et yemekleri</a></li>
-                <li><a href="#">Tavuk yemekleri</a></li>
-                <li><a href="#">Balık ve deniz ürünleri</a></li>
-                <li><a href="#">Sebze yemekleri</a></li>
-                <li><a href="#">Baklagil yemekleri</a></li>
-            </ul>
-        </div>
+<script>
+function startTimer() {
+  const schoolName = document.getElementById('schoolInput').value
+  if (!schoolName) return
 
-        <div class="category-group">
-            <span class="category-title">Tatlılar</span>
-            <ul class="sub-categories">
-                <li><a href="#">Şerbetli tatlılar</a></li>
-                <li><a href="#">Sütlü tatlılar</a></li>
-                <li><a href="#">Kekler</a></li>
-                <li><a href="#">Kurabiyeler</a></li>
-            </ul>
-        </div>
-    </div>
+  const now = new Date()
+  const target = new Date()
+  target.setDate(now.getDate() + 1)
+  target.setHours(10, 0, 0, 0)
 
-    <!-- Tariflerin Listelendiği Alan -->
-    <div class="main-content">
-        <!-- Liste Görünümü -->
-        <div id="list-view">
-            <div class="header">
-                <h1>Öne Çıkan Türk Yemekleri</h1>
-                <p>Özenle seçilmiş, tam ölçülü geleneksel lezzetler.</p>
-            </div>
+  const interval = setInterval(function() {
+    const currentTime = new Date()
+    const diff = target - currentTime
 
-            <div class="recipe-grid">
-                <!-- Kart 1 (id bilgisi eklendi, onclick kaldırıldı) -->
-                <div class="recipe-card" id="card-mercimek">
-                    <img src="https://images.unsplash.com/photo-1547592165-e1d17fed6005?auto=format&fit=crop&w=600&q=80" alt="Mercimek Çorbası" class="recipe-image">
-                    <div class="recipe-info">
-                        <span class="recipe-tag">Baklagil Çorbaları</span>
-                        <div class="recipe-name">Süzme Mercimek Çorbası</div>
-                        <div class="recipe-desc">Limon ve kruton eşliğinde sunulan, lokanta usulü tam kıvamında nefis başlangıç.</div>
-                    </div>
-                </div>
+    if (diff <= 0) {
+      clearInterval(interval)
+      document.getElementById('timer').innerText = schoolName + ' icin sure doldu'
+      return
+    }
 
-                <!-- Kart 2 -->
-                <div class="recipe-card" id="card-kurufasulye">
-                    <img src="https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=600&q=80" alt="Kuru Fasulye" class="recipe-image">
-                    <div class="recipe-info">
-                        <span class="recipe-tag">Baklagil Yemekleri</span>
-                        <div class="recipe-name">Geleneksel Kuru Fasulye</div>
-                        <div class="recipe-desc">Yanında tane tane ayrılmış pirinç pilavı ile Türk mutfağının vazgeçilmez baş tacı.</div>
-                    </div>
-                </div>
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
-                <!-- Kart 3 -->
-                <div class="recipe-card" id="card-baklava">
-                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80" alt="Gaziantep Baklavası" class="recipe-image">
-                    <div class="recipe-info">
-                        <span class="recipe-tag">Şerbetli Tatlılar</span>
-                        <div class="recipe-name">Antep Fıstıklı Baklava</div>
-                        <div class="recipe-desc">Çıtır çıtır yufkası ve bol fıstığıyla bayramların ve özel günlerin en tatlı sonu.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    document.getElementById('timer').innerText = schoolName + ' acilmasina kalan sure ' + hours + ' saat ' + minutes + ' dakika ' + seconds + ' saniye'
+  }, 1000)
+}
+</script>
 
-        <!-- Detay Görünümü -->
-        <div id="detail-view" class="recipe-detail">
-            <div class="back-btn" id="back-to-home-btn">⬅ Ana Sayfaya Dön</div>
-            <h1 id="detail-title">Yemek Adı</h1>
-            <span id="detail-tag" class="recipe-tag" style="margin-top: 10px;">Kategori</span>
-            
-            <img id="detail-img" src="" alt="" class="detail-image" style="margin-top: 20px;">
-            
-            <div class="detail-section">
-                <h3>Malzemeler</h3>
-                <ul id="detail-ingredients"></ul>
-            </div>
-
-            <div class="detail-section">
-                <h3>Hazırlanışı</h3>
-                <ol id="detail-instructions"></ol>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Tarif verileri (Görseller en stabil sunuculardan güncellendi)
-        const recipeData = {
-            mercimek: {
-                title: "Süzme Mercimek Çorbası",
-                tag: "Baklagil Çorbaları",
-                img: "https://images.unsplash.com/photo-1547592165-e1d17fed6005?auto=format&fit=crop&w=800&q=80",
-                ingredients: [
-                    "1 su bardağı kırmızı mercimek",
-                    "1 adet kuru soğan",
-                    "1 adet patates",
-                    "1 adet havuç",
-                    "1 yemek kaşığı tereyağı",
-                    "5 su bardağı sıcak su",
-                    "Tuz, karabiber, kimyon"
-                ],
-                instructions: [
-                    "Sebzeleri küp küp doğrayın ve tereyağında kavurun.",
-                    "Yıkanmış mercimekleri ve sıcak suyu ekleyip sebzeler yumuşayana kadar pişirin.",
-                    "Çorbayı pürüzsüz olana kadar blenderdan geçirin.",
-                    "Üzerine kızdırılmış tereyağı ve pul biber dökerek servis yapın."
-                ]
-            },
-            kurufasulye: {
-                title: "Geleneksel Kuru Fasulye",
-                tag: "Baklagil Yemekleri",
-                img: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=800&q=80",
-                ingredients: [
-                    "2 su bardağı kuru fasulye (akşamdan ıslatılmış)",
-                    "1 adet kuru soğan",
-                    "150 gr kuşbaşı et",
-                    "1 yemek kaşığı domates salçası",
-                    "1 yemek kaşığı biber salçası",
-                    "2 yemek kaşığı tereyağı",
-                    "Sıcak su, tuz"
-                ],
-                instructions: [
-                    "Etleri düdüklü tencereye alıp suyunu salıp çekene kadar kavurun.",
-                    "Soğanları ekleyip pembeleşene kadar kavurmaya devam edin.",
-                    "Salçaları ekleyin ardından süzdüğünüz fasulyeleri ilave edin.",
-                    "Üzerini geçecek kadar sıcak su ve tuz ekleyip fasulyeler yumuşayana kadar pişirin."
-                ]
-            },
-            baklava: {
-                title: "Antep Fıstıklı Baklava",
-                tag: "Şerbetli Tatlılar",
-                img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80",
-                ingredients: [
-                    "1 paket hazır baklavalık yufka",
-                    "250 gr tereyağı",
-                    "2 su bardağı çekilmiş Antep fıstığı",
-                    "Şerbeti için: 3 su bardağı şeker, 3 su bardağı su, 1 tatlı kaşığı limon suyu"
-                ],
-                instructions: [
-                    "Öncelikle şerbeti kaynatın ve soğumaya bırakın.",
-                    "Eritilmiş tereyağı ile yufkaları aralarına sürerek tepsiye dizin.",
-                    "Orta kata bolca Antep fıstığı serpiştirin.",
-                    "Kalan yufkaları da aynı şekilde dizip baklavayı dilimleyin.",
-                    "180 derece fırında altı üstü kızarana kadar pişirin ve sıcak baklavaya soğuk şerbeti verin."
-                ]
-            }
-        };
-
-        // Tarif detayını ekrana basan güvenli fonksiyon
-        function openRecipeDetails(recipeKey) {
-            const data = recipeData[recipeKey];
-            if (!data) return;
-
-            document.getElementById('detail-title').innerText = data.title;
-            document.getElementById('detail-tag').innerText = data.tag;
-            document.getElementById('detail-img').src = data.img;
-            document.getElementById('detail-img').alt = data.title;
-
-            // Malzeme listesini güvenle temizle ve doldur
-            const ingList = document.getElementById('detail-ingredients');
-            ingList.innerHTML = '';
-            for (let i = 0; i < data.ingredients.length; i++) {
-                const li = document.createElement('li');
-                li.innerText = data.ingredients[i];
-                ingList.appendChild(li);
-            }
-
-            // Hazırlanış adımlarını güvenle temizle ve doldur
-            const insList = document.getElementById('detail-instructions');
-            insList.innerHTML = '';
-            for (let j = 0; j < data.instructions.length; j++) {
-                const li = document.createElement('li');
-                li.innerText = data.instructions[j];
-                insList.appendChild(li);
-            }
-
-            // Sayfaları değiştir
-            document.getElementById('list-view').style.display = 'none';
-            document.getElementById('detail-view').style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        // Ana listeye geri dönme fonksiyonu
-        function backToHomeList() {
-            document.getElementById('list-view').style.display = 'block';
-            document.getElementById('detail-view').style.display = 'none';
-            window.scrollTo(0, 0);
-        }
-
-        // DÜĞME VE KART BAĞLANTILARI (En güvenli JavaScript Olay Dinleyicileri)
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Kart tıklamaları
-            document.getElementById('card-mercimek').addEventListener('click', function() {
-                openRecipeDetails('mercimek');
-            });
-
-            document.getElementById('card-kurufasulye').addEventListener('click', function() {
-                openRecipeDetails('kurufasulye');
-            });
-
-            document.getElementById('card-baklava').addEventListener('click', function() {
-                openRecipeDetails('baklava');
-            });
-
-            // Geri dön butonları
-            document.getElementById('back-to-home-btn').addEventListener('click', backToHomeList);
-            document.getElementById('menu-home-btn').addEventListener('click', backToHomeList);
-
-            // Sol menüdeki boş kategorilere tıklanırsa da ana sayfaya atsın (kilitlenmesin diye)
-            const links = document.querySelectorAll('.sub-categories a');
-            links.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    backToHomeList();
-                });
-            });
-        });
-    </script>
 </body>
 </html>
