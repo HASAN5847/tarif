@@ -35,38 +35,39 @@
       transition: opacity 0.5s ease;
     }
 
-    .splash-logo {
-      font-size: 60px;
-      margin-bottom: 10px;
+    /* Siyah Çerçeveli Yeşil Kutu ve Siyah Yazı Stili */
+    .splash-box {
+      background-color: #2ecc71;
+      border: 4px solid #000000;
+      padding: 20px 40px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    .splash-title {
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 5px;
+    .splash-text-top {
+      font-size: 38px;
+      font-weight: 900;
+      color: #000000;
+      line-height: 1.1;
+      letter-spacing: 2px;
+    }
+
+    .splash-text-bottom {
+      font-size: 38px;
+      font-weight: 900;
+      color: #000000;
+      line-height: 1.1;
+      letter-spacing: 2px;
     }
 
     .splash-subtitle {
       font-size: 16px;
       opacity: 0.9;
-      margin-bottom: 25px;
-    }
-
-    .splash-btn {
-      background-color: #ffffff;
-      color: #2ecc71;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-    }
-
-    .splash-btn:hover {
-      transform: scale(1.05);
     }
 
     /* Üst Bar Navbar */
@@ -318,12 +319,13 @@
 </head>
 <body>
 
-  <!-- Yeşil Açılış Ekranı -->
+  <!-- Yeşil Açılış Ekranı (Butonsuz, Otomatik 2 Saniye Sonra Kapanır) -->
   <div id="splash-screen">
-    <div class="splash-logo">🟢</div>
-    <div class="splash-title">Hasan Eats</div>
+    <div class="splash-box">
+      <div class="splash-text-top">HASAN</div>
+      <div class="splash-text-bottom">EATS</div>
+    </div>
     <div class="splash-subtitle">Sıcak hızlı ve lezzetli yemekler kapında</div>
-    <button class="splash-btn" onclick="enterApp()">Sipariş Vermeye Başla</button>
   </div>
 
   <!-- Header Navbar -->
@@ -496,13 +498,16 @@
   </div>
 
   <script>
-    function enterApp() {
-      const splash = document.getElementById('splash-screen');
-      splash.style.opacity = '0';
+    // Sayfa yüklendikten 2 saniye sonra yeşil ekran otomatik kapanır
+    window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
-        splash.style.display = 'none';
-      }, 500);
-    }
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 500);
+      }, 2000);
+    });
 
     let cart = [];
 
@@ -668,4 +673,4 @@
   </script>
 </body>
   </html>
-      
+    
