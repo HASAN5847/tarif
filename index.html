@@ -61,6 +61,12 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     .logo {
       font-size: 24px;
       font-weight: bold;
@@ -68,6 +74,23 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .nav-btn {
+      background-color: #f8f9fa;
+      border: 1.5px solid #2ecc71;
+      color: #2ecc71;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: #2ecc71;
+      color: #fff;
     }
 
     .cart-btn-header {
@@ -179,7 +202,7 @@
       color: #fff;
     }
 
-    /* Modallar (Popup Ekrani) */
+    /* Modallar (Popup Ekranı) */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -198,8 +221,8 @@
       border-radius: 15px;
       padding: 25px;
       width: 90%;
-      max-width: 500px;
-      max-height: 90vh;
+      max-width: 600px;
+      max-height: 85vh;
       overflow-y: auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       position: relative;
@@ -211,9 +234,64 @@
       right: 15px;
       background: none;
       border: none;
-      font-size: 20px;
+      font-size: 22px;
       cursor: pointer;
       color: #888;
+      font-weight: bold;
+      z-index: 10;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+
+    /* Tüm Yemekler Listesi Stilleri */
+    .menu-category-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2ecc71;
+      margin: 20px 0 10px 0;
+      border-bottom: 2px solid #2ecc71;
+      padding-bottom: 5px;
+    }
+
+    .food-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .food-item-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .food-item-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .food-item-price {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .small-add-btn {
+      background-color: #2ecc71;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .small-add-btn:hover {
+      background-color: #27ae60;
     }
 
     .cart-item {
@@ -259,10 +337,10 @@
       background-color: #27ae60;
     }
 
-    /* Kurye Takip Ekranı */
+    /* Kurye Takip Ekranı & Harita */
     #map-container {
       width: 100%;
-      height: 280px;
+      height: 320px;
       background-color: #e5e3df;
       border-radius: 12px;
       margin: 15px 0;
@@ -299,8 +377,11 @@
 
   <!-- Header / Navbar -->
   <header>
-    <div class="logo">
-      <span>🟢</span> Hasan Eats
+    <div class="header-left">
+      <div class="logo">
+        <span>🟢</span> Hasan Eats
+      </div>
+      <button class="nav-btn" onclick="openAllFoodsModal()">📋 Tüm Yemekler</button>
     </div>
     <button class="cart-btn-header" onclick="openCart()">
       🛒 Sepetim <span class="cart-badge" id="cart-count">0</span>
@@ -315,8 +396,8 @@
         <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400" alt="Pizza">
         <div class="card-body">
           <div class="card-title">Karışık Pizza</div>
-          <div class="card-price">180 TL</div>
-          <button class="add-btn" onclick="addToCart('Karışık Pizza', 180)">Sepete Ekle</button>
+          <div class="card-price">380 TL</div>
+          <button class="add-btn" onclick="addToCart('Karışık Pizza', 380)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -324,8 +405,8 @@
         <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" alt="Burger">
         <div class="card-body">
           <div class="card-title">Cheeseburger Menü</div>
-          <div class="card-price">160 TL</div>
-          <button class="add-btn" onclick="addToCart('Cheeseburger Menü', 160)">Sepete Ekle</button>
+          <div class="card-price">340 TL</div>
+          <button class="add-btn" onclick="addToCart('Cheeseburger Menü', 340)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -333,8 +414,8 @@
         <img src="https://images.unsplash.com/photo-1662116765994-d2325372418e?w=400" alt="Döner">
         <div class="card-body">
           <div class="card-title">Et Döner Dürüm</div>
-          <div class="card-price">140 TL</div>
-          <button class="add-btn" onclick="addToCart('Et Döner Dürüm', 140)">Sepete Ekle</button>
+          <div class="card-price">290 TL</div>
+          <button class="add-btn" onclick="addToCart('Et Döner Dürüm', 290)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -342,8 +423,8 @@
         <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400" alt="Köfte">
         <div class="card-body">
           <div class="card-title">Porsiyon İzgara Köfte</div>
-          <div class="card-price">200 TL</div>
-          <button class="add-btn" onclick="addToCart('Porsiyon İzgara Köfte', 200)">Sepete Ekle</button>
+          <div class="card-price">420 TL</div>
+          <button class="add-btn" onclick="addToCart('Porsiyon İzgara Köfte', 420)">Sepete Ekle</button>
         </div>
       </div>
     </div>
@@ -354,8 +435,8 @@
         <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" alt="Burger Kong">
         <div class="card-body">
           <div class="card-title">Burger Kong</div>
-          <div class="card-price">Kong Burger Menü - 190 TL</div>
-          <button class="add-btn" onclick="addToCart('Burger Kong Menü', 190)">Sepete Ekle</button>
+          <div class="card-price">Kong Burger Menü - 390 TL</div>
+          <button class="add-btn" onclick="addToCart('Burger Kong Menü', 390)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -363,8 +444,8 @@
         <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400" alt="Popeyes">
         <div class="card-body">
           <div class="card-title">Popeyes</div>
-          <div class="card-price">Tavuk Kovası - 220 TL</div>
-          <button class="add-btn" onclick="addToCart('Popeyes Tavuk Kovası', 220)">Sepete Ekle</button>
+          <div class="card-price">Tavuk Kovası - 450 TL</div>
+          <button class="add-btn" onclick="addToCart('Popeyes Tavuk Kovası', 450)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -372,8 +453,8 @@
         <img src="https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400" alt="Baca Döner">
         <div class="card-body">
           <div class="card-title">Baca Döner</div>
-          <div class="card-price">Tombik Döner - 130 TL</div>
-          <button class="add-btn" onclick="addToCart('Baca Tombik Döner', 130)">Sepete Ekle</button>
+          <div class="card-price">Tombik Döner - 280 TL</div>
+          <button class="add-btn" onclick="addToCart('Baca Tombik Döner', 280)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -381,8 +462,8 @@
         <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400" alt="Köfteci Yusuf">
         <div class="card-body">
           <div class="card-title">Köfteci Yusuf</div>
-          <div class="card-price">Ekmek Arası Köfte - 150 TL</div>
-          <button class="add-btn" onclick="addToCart('Yusuf Ekmek Arası Köfte', 150)">Sepete Ekle</button>
+          <div class="card-price">Ekmek Arası Köfte - 310 TL</div>
+          <button class="add-btn" onclick="addToCart('Yusuf Ekmek Arası Köfte', 310)">Sepete Ekle</button>
         </div>
       </div>
 
@@ -390,10 +471,19 @@
         <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=400" alt="McDonalds">
         <div class="card-body">
           <div class="card-title">McDonald's</div>
-          <div class="card-price">Big Mac Menü - 185 TL</div>
-          <button class="add-btn" onclick="addToCart('Big Mac Menü', 185)">Sepete Ekle</button>
+          <div class="card-price">Big Mac Menü - 360 TL</div>
+          <button class="add-btn" onclick="addToCart('Big Mac Menü', 360)">Sepete Ekle</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Tüm Yemekler Modalı -->
+  <div class="modal-overlay" id="all-foods-modal">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('all-foods-modal')">✖</button>
+      <h2>Tüm Yemekler & Menü</h2>
+      <div id="all-foods-container"></div>
     </div>
   </div>
 
@@ -438,27 +528,167 @@
   <!-- Canlı Kurye Takip Modalı -->
   <div class="modal-overlay" id="tracking-modal">
     <div class="modal">
+      <button class="close-btn" onclick="closeModal('tracking-modal')">✖</button>
       <h2>Kuryeniz Nerede? 📍</h2>
       <div class="status-badge" id="courier-status">Kurye restorandan yola çıktı...</div>
       
       <div id="map-container">
-        <canvas id="mapCanvas" width="450" height="280"></canvas>
+        <canvas id="mapCanvas" width="500" height="320"></canvas>
       </div>
 
       <p style="text-align: center; font-size: 14px; color: #555;">
-        Tahmini Teslimat: <b style="color:#2ecc71;">12 Dakika</b>
+        Tahmini Teslimat: <b style="color:#2ecc71;" id="delivery-time">25 Dakika</b>
       </p>
-      <button class="submit-btn" style="margin-top: 15px; background-color:#333;" onclick="closeModal('tracking-modal')">Kapat</button>
+      <button class="submit-btn" style="margin-top: 15px; background-color:#333;" onclick="closeModal('tracking-modal')">Takibi Kapat / Ana Sayfaya Dön</button>
     </div>
   </div>
 
   <script>
-    // 1. Açılış Ekranı (2 Saniye)
+    // Tüm Yemekler Verisi
+    const menuData = [
+      {
+        category: "🍔 Fast Food",
+        items: [
+          { name: "Burger", price: 320 },
+          { name: "Pizza", price: 380 },
+          { name: "Tost", price: 180 },
+          { name: "Sandviç", price: 210 },
+          { name: "Kumpir", price: 290 },
+          { name: "Patates Kızartması", price: 150 },
+          { name: "Çıtır Tavuk", price: 260 },
+          { name: "Nuggets", price: 220 },
+          { name: "Soğan Halkası", price: 140 }
+        ]
+      },
+      {
+        category: "🌯 Dürüm & Sokak Lezzetleri",
+        items: [
+          { name: "Çiğköfte", price: 190 },
+          { name: "Döner", price: 270 },
+          { name: "Tantuni", price: 290 },
+          { name: "Kokoreç", price: 340 },
+          { name: "Dürüm", price: 250 },
+          { name: "Adana Dürüm", price: 310 },
+          { name: "Urfa Dürüm", price: 310 },
+          { name: "Tavuk Döner Dürüm", price: 230 },
+          { name: "Et Döner Dürüm", price: 330 }
+        ]
+      },
+      {
+        category: "🥩 Kebap & Izgara",
+        items: [
+          { name: "Kebap", price: 420 },
+          { name: "Adana Kebap", price: 450 },
+          { name: "Urfa Kebap", price: 450 },
+          { name: "Köfte", price: 410 },
+          { name: "Tavuk Şiş", price: 380 },
+          { name: "Tavuk Kanat", price: 390 },
+          { name: "Balık", price: 520 }
+        ]
+      },
+      {
+        category: "🥘 Türk Mutfağı",
+        items: [
+          { name: "Pide", price: 320 },
+          { name: "Lahmacun", price: 160 },
+          { name: "Mantı", price: 360 },
+          { name: "Börek", price: 220 },
+          { name: "Pilav", price: 150 },
+          { name: "Çorba", price: 140 },
+          { name: "Makarna", price: 280 }
+        ]
+      },
+      {
+        category: "🍕 Pizza",
+        items: [
+          { name: "Margherita", price: 340 },
+          { name: "Sucuklu Pizza", price: 390 },
+          { name: "Karışık Pizza", price: 420 },
+          { name: "Tavuklu Pizza", price: 370 },
+          { name: "4 Peynirli Pizza", price: 440 },
+          { name: "Pepperoni Pizza", price: 410 }
+        ]
+      },
+      {
+        category: "🍗 Tavuk",
+        items: [
+          { name: "Tavuk Burger", price: 290 },
+          { name: "Çıtır Tavuk", price: 270 },
+          { name: "Tavuk Nuggets", price: 230 },
+          { name: "Tavuk Şiş", price: 380 },
+          { name: "Tavuk Kanat", price: 390 },
+          { name: "Tavuk Menü", price: 420 }
+        ]
+      },
+      {
+        category: "🥗 Hafif & Sağlıklı",
+        items: [
+          { name: "Salata", price: 210 },
+          { name: "Tavuklu Salata", price: 290 },
+          { name: "Mevsim Salatası", price: 180 }
+        ]
+      },
+      {
+        category: "🍰 Tatlı",
+        items: [
+          { name: "Baklava", price: 480 },
+          { name: "Sütlaç", price: 190 },
+          { name: "Künefe", price: 320 },
+          { name: "Waffle", price: 310 },
+          { name: "Brownie", price: 240 },
+          { name: "Cheesecake", price: 260 },
+          { name: "Profiterol", price: 230 },
+          { name: "Dondurma", price: 170 }
+        ]
+      },
+      {
+        category: "🥤 İçecek",
+        items: [
+          { name: "Ayran", price: 60 },
+          { name: "Kola", price: 85 },
+          { name: "Fanta", price: 85 },
+          { name: "Sprite", price: 85 },
+          { name: "Ice Tea", price: 85 },
+          { name: "Su", price: 30 },
+          { name: "Meyve Suyu", price: 75 },
+          { name: "Çay", price: 40 },
+          { name: "Kahve", price: 110 }
+        ]
+      }
+    ];
+
+    function renderAllFoods() {
+      const container = document.getElementById('all-foods-container');
+      container.innerHTML = '';
+
+      menuData.forEach(cat => {
+        let catHtml = `<div class="menu-category-title">${cat.category}</div>`;
+        cat.items.forEach(item => {
+          catHtml += `
+            <div class="food-item-row">
+              <span class="food-item-name">${item.name}</span>
+              <div class="food-item-right">
+                <span class="food-item-price">${item.price} TL</span>
+                <button class="small-add-btn" onclick="addToCart('${item.name}', ${item.price})">Sepete Ekle</button>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML += catHtml;
+      });
+    }
+
+    function openAllFoodsModal() {
+      renderAllFoods();
+      document.getElementById('all-foods-modal').style.display = 'flex';
+    }
+
+    // Açılış Ekranı (2 Saniye)
     setTimeout(() => {
       document.getElementById('intro-screen').style.display = 'none';
     }, 2000);
 
-    // 2. Sepet Mantığı
+    // Sepet
     let cart = [];
 
     function addToCart(title, price) {
@@ -496,91 +726,4 @@
         `;
       });
 
-      document.getElementById('cart-total').innerText = total;
-    }
-
-    function removeItem(index) {
-      cart.splice(index, 1);
-      updateCartUI();
-    }
-
-    function openCart() {
-      document.getElementById('cart-modal').style.display = 'flex';
-    }
-
-    function openAddressModal() {
-      closeModal('cart-modal');
-      document.getElementById('address-modal').style.display = 'flex';
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
-    // 3. Kurye Takip ve Harita Animasyonu
-    let animationInterval;
-    let courierPos = { x: 50, y: 50 };
-    let targetPos = { x: 380, y: 220 };
-
-    function startTracking(event) {
-      event.preventDefault();
-      closeModal('address-modal');
-      document.getElementById('tracking-modal').style.display = 'flex';
-
-      // Sepeti Sıfırla
-      cart = [];
-      updateCartUI();
-
-      // Haritayı ve Animasyonu Başlat
-      initMap();
-    }
-
-    function initMap() {
-      const canvas = document.getElementById('mapCanvas');
-      const ctx = canvas.getContext('2d');
-
-      courierPos = { x: 60, y: 60 };
-      
-      if(animationInterval) clearInterval(animationInterval);
-
-      animationInterval = setInterval(() => {
-        // Kurye hedefe rastgele adımlarla ilerlesin
-        if (courierPos.x < targetPos.x) courierPos.x += Math.random() * 3 + 1;
-        if (courierPos.y < targetPos.y) courierPos.y += Math.random() * 2 + 0.5;
-
-        // Çizim
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Yolları Çiz
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 14;
-        
-        ctx.beginPath();
-        ctx.moveTo(30, 60); ctx.lineTo(400, 60);
-        ctx.moveTo(200, 20); ctx.lineTo(200, 260);
-        ctx.moveTo(60, 200); ctx.lineTo(420, 200);
-        ctx.stroke();
-
-        // Ev İkonu (Hedef)
-        ctx.font = '24px Arial';
-        ctx.fillText('🏠', targetPos.x - 10, targetPos.y + 10);
-
-        // Restoran İkonu (Başlangıç)
-        ctx.fillText('🍔', 40, 70);
-
-        // Kurye İkonu
-        ctx.fillText('🚴‍♂️', courierPos.x, courierPos.y);
-
-        // Teslim Edildi Kontrolü
-        if (courierPos.x >= targetPos.x && courierPos.y >= targetPos.y) {
-          document.getElementById('courier-status').innerText = '🎉 Kurye kapıda! Afiyet olsun!';
-          document.getElementById('courier-status').style.background = '#2ecc71';
-          document.getElementById('courier-status').style.color = '#fff';
-          clearInterval(animationInterval);
-        }
-      }, 100);
-    }
-  </script>
-</body>
-  </html>
-            
+      document.getElement
