@@ -621,17 +621,21 @@
 
     function renderAllFoods() {
       const container = document.getElementById('all-foods-container');
+      if(!container) return;
+      
       container.innerHTML = '';
 
       menuData.forEach(cat => {
         let catHtml = `<div class="menu-category-title">${cat.category}</div>`;
         cat.items.forEach(item => {
+          // Tırnak işaretlerinin bozulmaması için güvenli ekleme
+          const safeName = item.name.replace(/'/g, "\\'");
           catHtml += `
             <div class="food-item-row">
               <span class="food-item-name">${item.name}</span>
               <div class="food-item-right">
                 <span class="food-item-price">${item.price} TL</span>
-                <button class="small-add-btn" onclick="addToCart('${item.name}', ${item.price})">Sepete Ekle</button>
+                <button class="small-add-btn" onclick="addToCart('${safeName}', ${item.price})">Sepete Ekle</button>
               </div>
             </div>
           `;
@@ -704,19 +708,15 @@
       document.getElementById(id).style.display = 'none';
     }
 
-    // Uzun Yol Kurye Takip Simülasyonu
+    // Kurye Takip Simülasyonu
     let animationInterval;
     
     const waypoints = [
       { x: 50, y: 50 },   // Restoran
-      { x: 180, y: 50 },  // 1. Cadde
-      { x: 180, y: 150 }, // 1. Viraj
-      { x: 80, y: 150 },  // Arka Sokak
-      { x: 80, y: 260 },  // 2. Viraj
-      { x: 320, y: 260 }, // Ana Cadde
-      { x: 320, y: 120 }, // 3. Viraj
-      { x: 440, y: 120 }, // Ev Yolu
-      { x: 440, y: 250 }  // Ev (Hedef)
-    ];
-
-    let currentSegm
+      { x: 180, y: 50 },  
+      { x: 180, y: 150 }, 
+      { x: 80, y: 150 },  
+      { x: 80, y: 260 },  
+      { x: 320, y: 260 }, 
+      { x: 320, y: 120 }, 
+      { x: 440, y: 120
