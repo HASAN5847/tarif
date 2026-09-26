@@ -1,50 +1,586 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Okul Sayaci</title>
-<style>
-  body { font-family: sans-serif; text-align: center; margin-top: 50px }
-  input, button { padding: 10px; font-size: 16px }
-  #timer { font-size: 24px; margin-top: 20px; font-weight: bold; color: #cc0000 }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasan Eats - Yemek Siparişi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    /* 2 Saniyelik Yeşil Açılış Ekranı */
+    #intro-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #2ecc71;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .intro-box {
+      background-color: #2ecc71;
+      border: 5px solid #000;
+      padding: 40px 60px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .intro-box h1 {
+      color: #000;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height: 1.2;
+    }
+
+    /* Üst Bar (Navbar) */
+    header {
+      background-color: #ffffff;
+      border-bottom: 2px solid #f0f0f0;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2ecc71;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-btn-header {
+      background-color: #2ecc71;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .cart-btn-header:hover {
+      background-color: #27ae60;
+    }
+
+    .cart-badge {
+      background-color: #fff;
+      color: #2ecc71;
+      border-radius: 50%;
+      padding: 2px 7px;
+      font-size: 12px;
+    }
+
+    /* Ana Konteyner */
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 30px 0 15px 0;
+      color: #222;
+    }
+
+    /* Grid Kartlar */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .card-price {
+      font-size: 15px;
+      color: #2ecc71;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .add-btn {
+      width: 100%;
+      background-color: #f8f9fa;
+      border: 1.5px solid #2ecc71;
+      color: #2ecc71;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      background-color: #2ecc71;
+      color: #fff;
+    }
+
+    /* Modallar (Popup Ekrani) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background-color: #2ecc71;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background-color: #27ae60;
+    }
+
+    /* Kurye Takip Ekranı */
+    #map-container {
+      width: 100%;
+      height: 280px;
+      background-color: #e5e3df;
+      border-radius: 12px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #ddd;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .status-badge {
+      background: #e8f8f0;
+      color: #2ecc71;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Okul Sayaci</h1>
-<input type="text" id="schoolInput" placeholder="Okul adi yazin">
-<button onclick="startTimer()">Okulu Ara</button>
+  <!-- Açılış Ekranı -->
+  <div id="intro-screen">
+    <div class="intro-box">
+      <h1>HASAN<br>EATS</h1>
+    </div>
+  </div>
 
-<div id="timer"></div>
+  <!-- Header / Navbar -->
+  <header>
+    <div class="logo">
+      <span>🟢</span> Hasan Eats
+    </div>
+    <button class="cart-btn-header" onclick="openCart()">
+      🛒 Sepetim <span class="cart-badge" id="cart-count">0</span>
+    </button>
+  </header>
 
-<script>
-function startTimer() {
-  const schoolName = document.getElementById('schoolInput').value
-  if (!schoolName) return
+  <!-- Main Content -->
+  <div class="container">
+    <h2 class="section-title">Popüler Kategoriler</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400" alt="Pizza">
+        <div class="card-body">
+          <div class="card-title">Karışık Pizza</div>
+          <div class="card-price">180 TL</div>
+          <button class="add-btn" onclick="addToCart('Karışık Pizza', 180)">Sepete Ekle</button>
+        </div>
+      </div>
 
-  const now = new Date()
-  const target = new Date()
-  target.setDate(now.getDate() + 1)
-  target.setHours(10, 0, 0, 0)
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" alt="Burger">
+        <div class="card-body">
+          <div class="card-title">Cheeseburger Menü</div>
+          <div class="card-price">160 TL</div>
+          <button class="add-btn" onclick="addToCart('Cheeseburger Menü', 160)">Sepete Ekle</button>
+        </div>
+      </div>
 
-  const interval = setInterval(function() {
-    const currentTime = new Date()
-    const diff = target - currentTime
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1662116765994-d2325372418e?w=400" alt="Döner">
+        <div class="card-body">
+          <div class="card-title">Et Döner Dürüm</div>
+          <div class="card-price">140 TL</div>
+          <button class="add-btn" onclick="addToCart('Et Döner Dürüm', 140)">Sepete Ekle</button>
+        </div>
+      </div>
 
-    if (diff <= 0) {
-      clearInterval(interval)
-      document.getElementById('timer').innerText = schoolName + ' icin sure doldu'
-      return
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400" alt="Köfte">
+        <div class="card-body">
+          <div class="card-title">Porsiyon İzgara Köfte</div>
+          <div class="card-price">200 TL</div>
+          <button class="add-btn" onclick="addToCart('Porsiyon İzgara Köfte', 200)">Sepete Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Sana Yakın Dükkanlar</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" alt="Burger Kong">
+        <div class="card-body">
+          <div class="card-title">Burger Kong</div>
+          <div class="card-price">Kong Burger Menü - 190 TL</div>
+          <button class="add-btn" onclick="addToCart('Burger Kong Menü', 190)">Sepete Ekle</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400" alt="Popeyes">
+        <div class="card-body">
+          <div class="card-title">Popeyes</div>
+          <div class="card-price">Tavuk Kovası - 220 TL</div>
+          <button class="add-btn" onclick="addToCart('Popeyes Tavuk Kovası', 220)">Sepete Ekle</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400" alt="Baca Döner">
+        <div class="card-body">
+          <div class="card-title">Baca Döner</div>
+          <div class="card-price">Tombik Döner - 130 TL</div>
+          <button class="add-btn" onclick="addToCart('Baca Tombik Döner', 130)">Sepete Ekle</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400" alt="Köfteci Yusuf">
+        <div class="card-body">
+          <div class="card-title">Köfteci Yusuf</div>
+          <div class="card-price">Ekmek Arası Köfte - 150 TL</div>
+          <button class="add-btn" onclick="addToCart('Yusuf Ekmek Arası Köfte', 150)">Sepete Ekle</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=400" alt="McDonalds">
+        <div class="card-body">
+          <div class="card-title">McDonald's</div>
+          <div class="card-price">Big Mac Menü - 185 TL</div>
+          <button class="add-btn" onclick="addToCart('Big Mac Menü', 185)">Sepete Ekle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sepet Modalı -->
+  <div class="modal-overlay" id="cart-modal">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('cart-modal')">✖</button>
+      <h2>Sepetim</h2>
+      <div id="cart-items-list" style="margin: 20px 0;">
+        <p style="color:#777;">Sepetiniz henüz boş.</p>
+      </div>
+      <div style="font-weight: bold; font-size: 18px; margin-bottom: 15px;">
+        Toplam: <span id="cart-total" style="color:#2ecc71;">0</span> TL
+      </div>
+      <button class="submit-btn" id="checkout-btn" onclick="openAddressModal()" disabled>Siparişi Onayla</button>
+    </div>
+  </div>
+
+  <!-- Adres Formu Modalı -->
+  <div class="modal-overlay" id="address-modal">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal('address-modal')">✖</button>
+      <h2>Teslimat Adresi</h2>
+      <form onsubmit="startTracking(event)" style="margin-top: 15px;">
+        <div class="form-group">
+          <label>Ad Soyad</label>
+          <input type="text" required placeholder="Hasan Yılmaz">
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" required placeholder="05XX XXX XX XX">
+        </div>
+        <div class="form-group">
+          <label>Açık Adres</label>
+          <textarea rows="3" required placeholder="Mahalle, Sokak, Bina No, Daire"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Kuryeyi Çağır ve Öde</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Canlı Kurye Takip Modalı -->
+  <div class="modal-overlay" id="tracking-modal">
+    <div class="modal">
+      <h2>Kuryeniz Nerede? 📍</h2>
+      <div class="status-badge" id="courier-status">Kurye restorandan yola çıktı...</div>
+      
+      <div id="map-container">
+        <canvas id="mapCanvas" width="450" height="280"></canvas>
+      </div>
+
+      <p style="text-align: center; font-size: 14px; color: #555;">
+        Tahmini Teslimat: <b style="color:#2ecc71;">12 Dakika</b>
+      </p>
+      <button class="submit-btn" style="margin-top: 15px; background-color:#333;" onclick="closeModal('tracking-modal')">Kapat</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. Açılış Ekranı (2 Saniye)
+    setTimeout(() => {
+      document.getElementById('intro-screen').style.display = 'none';
+    }, 2000);
+
+    // 2. Sepet Mantığı
+    let cart = [];
+
+    function addToCart(title, price) {
+      cart.push({ title, price });
+      updateCartUI();
     }
 
-    const hours = Math.floor(diff / (1000 * 60 * 60))
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+    function updateCartUI() {
+      document.getElementById('cart-count').innerText = cart.length;
+      
+      const cartList = document.getElementById('cart-items-list');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      
+      if (cart.length === 0) {
+        cartList.innerHTML = '<p style="color:#777;">Sepetiniz henüz boş.</p>';
+        checkoutBtn.disabled = true;
+        document.getElementById('cart-total').innerText = '0';
+        return;
+      }
 
-    document.getElementById('timer').innerText = schoolName + ' acilmasina kalan sure ' + hours + ' saat ' + minutes + ' dakika ' + seconds + ' saniye'
-  }, 1000)
-}
-</script>
+      checkoutBtn.disabled = false;
+      let total = 0;
+      cartList.innerHTML = '';
 
+      cart.forEach((item, index) => {
+        total += item.price;
+        cartList.innerHTML += `
+          <div class="cart-item">
+            <span>${item.title}</span>
+            <div>
+              <b style="margin-right:10px;">${item.price} TL</b>
+              <small style="color:red; cursor:pointer;" onclick="removeItem(${index})">Sil</small>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('cart-total').innerText = total;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function openCart() {
+      document.getElementById('cart-modal').style.display = 'flex';
+    }
+
+    function openAddressModal() {
+      closeModal('cart-modal');
+      document.getElementById('address-modal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // 3. Kurye Takip ve Harita Animasyonu
+    let animationInterval;
+    let courierPos = { x: 50, y: 50 };
+    let targetPos = { x: 380, y: 220 };
+
+    function startTracking(event) {
+      event.preventDefault();
+      closeModal('address-modal');
+      document.getElementById('tracking-modal').style.display = 'flex';
+
+      // Sepeti Sıfırla
+      cart = [];
+      updateCartUI();
+
+      // Haritayı ve Animasyonu Başlat
+      initMap();
+    }
+
+    function initMap() {
+      const canvas = document.getElementById('mapCanvas');
+      const ctx = canvas.getContext('2d');
+
+      courierPos = { x: 60, y: 60 };
+      
+      if(animationInterval) clearInterval(animationInterval);
+
+      animationInterval = setInterval(() => {
+        // Kurye hedefe rastgele adımlarla ilerlesin
+        if (courierPos.x < targetPos.x) courierPos.x += Math.random() * 3 + 1;
+        if (courierPos.y < targetPos.y) courierPos.y += Math.random() * 2 + 0.5;
+
+        // Çizim
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Yolları Çiz
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 14;
+        
+        ctx.beginPath();
+        ctx.moveTo(30, 60); ctx.lineTo(400, 60);
+        ctx.moveTo(200, 20); ctx.lineTo(200, 260);
+        ctx.moveTo(60, 200); ctx.lineTo(420, 200);
+        ctx.stroke();
+
+        // Ev İkonu (Hedef)
+        ctx.font = '24px Arial';
+        ctx.fillText('🏠', targetPos.x - 10, targetPos.y + 10);
+
+        // Restoran İkonu (Başlangıç)
+        ctx.fillText('🍔', 40, 70);
+
+        // Kurye İkonu
+        ctx.fillText('🚴‍♂️', courierPos.x, courierPos.y);
+
+        // Teslim Edildi Kontrolü
+        if (courierPos.x >= targetPos.x && courierPos.y >= targetPos.y) {
+          document.getElementById('courier-status').innerText = '🎉 Kurye kapıda! Afiyet olsun!';
+          document.getElementById('courier-status').style.background = '#2ecc71';
+          document.getElementById('courier-status').style.color = '#fff';
+          clearInterval(animationInterval);
+        }
+      }, 100);
+    }
+  </script>
 </body>
-</html>
+  </html>
+            
