@@ -17,7 +17,7 @@
       color: #333;
     }
 
-    /* 2 Saniyelik Yeşil Açılış Ekranı */
+    /* Açılış Ekranı */
     #intro-screen {
       position: fixed;
       top: 0;
@@ -29,6 +29,7 @@
       justify-content: center;
       align-items: center;
       z-index: 10000;
+      cursor: pointer;
     }
 
     .intro-box {
@@ -47,7 +48,7 @@
       line-height: 1.2;
     }
 
-    /* Üst Bar (Navbar) */
+    /* Üst Bar Navbar */
     header {
       background-color: #ffffff;
       border-bottom: 2px solid #f0f0f0;
@@ -202,7 +203,7 @@
       color: #fff;
     }
 
-    /* Modallar (Popup Ekranı) */
+    /* Modallar */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -245,7 +246,6 @@
       color: #000;
     }
 
-    /* Tüm Yemekler Listesi Stilleri */
     .menu-category-title {
       font-size: 18px;
       font-weight: 700;
@@ -368,14 +368,14 @@
 </head>
 <body>
 
-  <!-- Açılış Ekranı -->
-  <div id="intro-screen">
+  <!-- Açılış Ekranı (Dokunarak da Kapatılabilir) -->
+  <div id="intro-screen" onclick="hideIntro()">
     <div class="intro-box">
       <h1>HASAN<br>EATS</h1>
     </div>
   </div>
 
-  <!-- Header / Navbar -->
+  <!-- Header Navbar -->
   <header>
     <div class="header-left">
       <div class="logo">
@@ -544,6 +544,22 @@
   </div>
 
   <script>
+    // Açılış Ekranı Kapatma Fonksiyonu
+    function hideIntro() {
+      const intro = document.getElementById('intro-screen');
+      if (intro) {
+        intro.style.display = 'none';
+      }
+    }
+
+    // Sayfa Yüklendiğinde 1.5 saniye sonra otomatik kapat
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(hideIntro, 1500);
+    });
+
+    // Her ihtimale karşı zamanlayıcı
+    setTimeout(hideIntro, 2000);
+
     // Tüm Yemekler Verisi
     const menuData = [
       {
@@ -683,12 +699,7 @@
       document.getElementById('all-foods-modal').style.display = 'flex';
     }
 
-    // Açılış Ekranı (2 Saniye)
-    setTimeout(() => {
-      document.getElementById('intro-screen').style.display = 'none';
-    }, 2000);
-
-    // Sepet
+    // Sepet Mantığı
     let cart = [];
 
     function addToCart(title, price) {
@@ -717,13 +728,4 @@
         total += item.price;
         cartList.innerHTML += `
           <div class="cart-item">
-            <span>${item.title}</span>
-            <div>
-              <b style="margin-right:10px;">${item.price} TL</b>
-              <small style="color:red; cursor:pointer;" onclick="removeItem(${index})">Sil</small>
-            </div>
-          </div>
-        `;
-      });
-
-      document.getElement
+        
